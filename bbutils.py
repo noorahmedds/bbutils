@@ -2,7 +2,6 @@ import numpy as np
 from utils import *
 import cv2
 
-
 class BoundingBox:
     """
     Bounding Box Class
@@ -21,6 +20,8 @@ class BoundingBox:
         self.validate_bbox()
 
     def validate_bbox(self):
+        """Assertion suite
+        """
         # Evaluation set
         # Width and height cannot be negative or 0 (the current repo does not support inverted bounding boxes)
         # The bounding box should be an upright rectangle. This is automatically ensured with the xyxy notation
@@ -121,11 +122,15 @@ class BoundingBox:
         return np.array([((x2 - x1) / 2) + x1, y2])
 
     def get_crop(self, frame:np.array, pad_flag=False): 
+        """Returns a crop from a frame/image
 
-        # If the pad flag is on and the bounding box exceeds the frame size then pad to match the bounding box dimension
-        
-        # First determine a crop without assuming the above edge case
+        Args:
+            frame (np.array): Frame read into a numpy array
+            pad_flag (bool, optional): Pads the crop with appropriate padding if the bounding box coordinates exceed the frame. Defaults to False.
 
+        Returns:
+            np.ndarray: Cropped frame
+        """
 
         x1,y1,x2,y2 = self.clamp_in_frame(frame.shape, in_place=False)
         crop = frame[y1:y2, x1:x2]
@@ -138,11 +143,8 @@ class BoundingBox:
             left = right = top = bottom = 0
 
             if x1 < 0: left = x1
-            
             if x2 > W: right = W - x2
-            
             if y1 < 0: top = y1
-            
             if y2 > H: bottom = H - y2
 
             crop = cv2.copyMakeBorder(crop, top, bottom, left, right, cv2.BORDER_CONSTANT)
