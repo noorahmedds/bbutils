@@ -111,9 +111,6 @@ def update_entry_exit_stats_line(id_tracks, tracked_objects, momentum_term = (0.
 
             px = prev[0]
             py = prev[1]
-
-            centroid = (cx, cy)
-            id_tracks[identity]["centroids"].append(centroid)
             
             curr_area = (ymax-ymin) * (xmax-xmin)
             id_tracks[identity]["bbox_area"].append(curr_area)
@@ -123,6 +120,8 @@ def update_entry_exit_stats_line(id_tracks, tracked_objects, momentum_term = (0.
 
             cx = (mt * px) + ((1 - mt) * cx)
             cy = (mt * py) + ((1 - mt) * cy)
+            centroid = (cx, cy)
+            id_tracks[identity]["centroids"].append(centroid)
             
             threshold_flag = False
             if not alt_logic:
